@@ -135,7 +135,7 @@ run_daq()
 # ---------- Save to CSV ----------
 if step_data:
     full_df = pd.concat(step_data, ignore_index=True)
-    full_df.to_csv("static_test_2nd_sensor.csv", index=False)
+    full_df.to_csv("static_test_2nd_sensor4.csv", index=False)
     print("Data saved to discrete_sensor_data.csv")
 else:
     print("No step data collected.")

@@ -90,7 +90,7 @@ df = pd.DataFrame({
 })
 
 # Optional: Save to CSV
-df.to_csv("dynamic_test_2N_2nd_sensor.csv", index=False)
+df.to_csv("dynamic_test_2nd_sensor2.csv", index=False)
 
 # Plot
 plt.figure(figsize=(8, 6))

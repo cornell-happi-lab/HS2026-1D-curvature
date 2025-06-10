@@ -4,14 +4,14 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 # Load the collected step data
-df = pd.read_csv("static_test_2nd_sensor.csv")
+df = pd.read_csv("calibration_data/static_test_2nd_sensor4.csv")
 df['FT_Z'] = -df['FT_Z']
 
 # Group by each step
 grouped = df.groupby('Step')
 
 # Define the baseline
-baseline = 248.74000677506774
+baseline = 735.1226262626262 # 248.74000677506774
 
 # Compute averages and std devs
 avg_ft = grouped['FT_Z'].mean()
@@ -20,24 +20,24 @@ avg_sensor = avg_sensor - baseline
 std_sensor = grouped['Sensor'].std()
 
 # Define the linear region threshold 
-limit = 15
+limit = 4
 mask = avg_ft < limit
 sensor = avg_sensor[mask]
 sensor_err = std_sensor[mask]
 ft = avg_ft[mask]
 x_model = np.linspace(ft.min(), ft.max(), 200)
 
-sensor_fit = np.linspace(0, 500, 500)
+sensor_fit = np.linspace(0, 300, 500)
 # Try to fit the linear function y = ax + b
 coeffs_linear = np.polyfit(sensor, ft, deg = 1)
-print(coeffs_linear) # [ 0.00883526 -1.07748348]
-linear_fit = 0.00883526 * sensor_fit -1.07748348
+print(coeffs_linear) # [ 0.00883526 -1.07748348] # [ 0.02822865 -0.94224846] #[0.01278697 0.04801019] # [0.01395828 0.0677103 ]
+linear_fit = 0.01395828 * sensor_fit + 0.0677103
 
 # Try to fit the quadratic model y = a + b*x + c*x^2, x is sensor
 coeffs_quad = np.polyfit(sensor, ft, deg =2)
-print(coeffs_quad) # [ 3.42089499e-05 -8.71522057e-03  4.62796956e-01]
+print(coeffs_quad) # [ 3.42089499e-05 -8.71522057e-03  4.62796956e-01] # [ 6.07799109e-05  1.02982734e-02 -1.38433643e-01]
 # Force = 0.00003497⋅x^2 − 0.002357⋅x + 0.10235
-quad_fit = 3.42089499e-05 * (sensor_fit**2) -8.71522057e-03 * sensor_fit + 4.62796956e-01
+quad_fit = 6.07799109e-05 * (sensor_fit**2) +1.02982734e-02 * sensor_fit -1.38433643e-01
 
 # Try to fit the 1.47 power function
 def power_func(x, a, b):
@@ -45,9 +45,9 @@ def power_func(x, a, b):
 params_power, _ = curve_fit(power_func, sensor, ft)
 a, b = params_power
 power_fit = a * (sensor_fit**1.47) + b
-# Force = 0.0004731482094181381 * (sensor_fit**1.47) -0.6678598570322021
-print(a)
-print(b)
+# Force = 0.0019086776537168572 * (sensor_fit**1.47) -0.14646366590244728
+print(a) # 0.0019086776537168572
+print(b) # -0.14646366590244728
 
 # Try to fit the exponential model y = a * e^(bx)
 # log(Force) = ln(a) + b*Sensor
@@ -56,8 +56,8 @@ coeffs = np.polyfit(sensor, log_ft, deg=1)
 b = coeffs[0]
 ln_a = coeffs[1]
 a = np.exp(ln_a)
-print(b)
-print(ln_a)
+# print(b)
+# print(ln_a)
 # ln(Force) = -3.1994982717702247 + 0.009745754189733688 * Sensor
 
 log_force = ln_a + b * sensor_fit
@@ -87,12 +87,12 @@ plt.errorbar(
 )
 
 # plt.plot(x_fit, y_log)
-plt.plot(quad_fit, sensor_fit, label = "Quadratic Fit", color = "Orange")
-plt.plot(exp_fit, sensor_fit, label = "Exp Fit", color = "Green")
+# plt.plot(quad_fit, sensor_fit, label = "Quadratic Fit", color = "Orange")
+# plt.plot(exp_fit, sensor_fit, label = "Exp Fit", color = "Green")
 plt.plot(linear_fit, sensor_fit, label = "Linear Fit", color = "Red")
-plt.plot(power_fit, sensor_fit, label = "Power Fit", color = "Purple")
-plt.ylim(0, 600)
-plt.xlim(0, 16)
+# plt.plot(power_fit, sensor_fit, label = "Power Fit", color = "Purple")
+plt.ylim(0, 300)
+plt.xlim(0, 5)
 # plt.plot(x, ln_y)
 
 plt.xlabel('FT Z Force')
