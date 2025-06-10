@@ -21,6 +21,7 @@ print(baseline)
 df['Sensor'] = df['Sensor'].clip(lower = 0)
 
 # Filter out the near-zero FT Z values
+df = df[3359:12060].reset_index(drop = True)
 df = df[(df['FT_Z'] < -0.03) | (df['FT_Z'] > 0.03)].reset_index(drop=True)
 
 # Calibration Function
@@ -49,21 +50,15 @@ def moving_average(x, window):
 
 df['Sensor_smooth'] = moving_average(df['Sensor'], 10)
 
-fig, ax_sensor = plt.subplots(figsize = (8, 6))
-ax_sensor.set_label("Sensor")
-ax_sensor.set_ylim(0, 500)
-ax_sensor.plot(df.index, df['Sensor_smooth'], color = "Gray")
 
-ax_force = ax_sensor.twinx()
-ax_force.set_label("Force (N)")
-ax_force.set_ylim(0, 4)
-ax_force.plot(df.index, df['FT_Z'], color = "Blue")
-# ax_force.plot(df.index, cal_quad(df['Sensor']), color = "Black", label = "Quadratic Fit")
-ax_force.plot(df.index, cal_linear(df['Sensor_smooth']), color = "green", label = "Linear Fit")
-# ax_force.plot(df.index, cal_power(df['Sensor_smooth']), color = "purple", label = "Power Fit")
-# ax_force.plot(df.index, cal_exp(df['Sensor']), color = "green", label = "Exp Fit")
+# Plot
+plt.figure(figsize=(8, 6))
+plt.scatter(df['FT_Z'], cal_linear(df['Sensor']), s = 7)
 
+plt.xlim(0, 4)
+plt.ylim(0, 4)
+plt.xlabel('Ground Truth (N)')
+plt.ylabel('Sensor Predict (N)')
 plt.grid(True)
-fig.tight_layout()
-plt.legend()
+plt.tight_layout()
 plt.show()
