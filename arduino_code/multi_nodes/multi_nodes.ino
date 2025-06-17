@@ -29,7 +29,7 @@ void loop(){
     {
       digitalWrite(rowpins[0], combo & 0x01);
       digitalWrite(rowpins[1], (combo >> 1) & 0x01);
-      delay(5);
+      delay(5); // 1ms
       readings[i][combo] = analogRead(A0);
     }
   }
