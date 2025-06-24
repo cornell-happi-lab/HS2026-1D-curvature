@@ -73,7 +73,7 @@ def run_daq():
                 sensor_vals = arduino_value.copy() if arduino_value else [np.nan] * 16
 
             if sensor_vals:
-                print(f"[LIVE] Sensor[0]: {sensor_vals[0]:.2f}, FT Z: {zforce:.2f}")
+                print(f"[LIVE] Sensor: {sensor_vals[12]:.2f} FT Z: {zforce:.2f}")
                 latest_ft_z = zforce
             else:
                 print(f"[LIVE] Invalid sensor data: {arduino_value}")
@@ -96,7 +96,7 @@ def run_daq():
 
                     sensor_samples.append(sensors)
                     ft_z_samples.append(zforce)
-                    print(f"[Step {step}] Sensor[0]: {sensors[0]:.2f}, FT Z: {zforce:.2f}")
+                    print(f"[Step {step}] Sensor: {sensor_vals[12]:.2f} FT Z: {zforce:.2f}")
                     time.sleep(0.01)
 
                 # Create DataFrame with columns S0 to S15 + FT_Z + Step
@@ -106,7 +106,7 @@ def run_daq():
                 step_data.append(df)
                 print(f"[STEP {step}] Done.\n")
                 step += 1
-
+         
                 # wait for key release
                 while keyboard.is_pressed("enter"):
                     time.sleep(0.05)
@@ -124,7 +124,7 @@ run_daq()
 # ---------- Save to CSV ----------
 if step_data:
     full_df = pd.concat(step_data, ignore_index=True)
-    full_df.to_csv("static_test_fournodes.csv", index=False)
+    full_df.to_csv("static_test_2ndrow.csv", index=False)
     print("Data saved to static_test_multinodes.csv")
 else:
     print("No step data collected.")

@@ -4,7 +4,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 # Load the collected step data
-df = pd.read_csv("calibration_data/static_test_2nd_sensor4.csv")
+df = pd.read_csv("calibration_data/static_test_node1.csv")
 df['FT_Z'] = -df['FT_Z']
 
 # Group by each step
@@ -15,9 +15,9 @@ baseline = 735.1226262626262 # 248.74000677506774
 
 # Compute averages and std devs
 avg_ft = grouped['FT_Z'].mean()
-avg_sensor = grouped['Sensor'].mean()
-avg_sensor = avg_sensor - baseline
-std_sensor = grouped['Sensor'].std()
+avg_sensor = grouped['S1'].mean()
+avg_sensor = avg_sensor
+std_sensor = grouped['S1'].std()
 
 # Define the linear region threshold 
 limit = 4
@@ -89,10 +89,10 @@ plt.errorbar(
 # plt.plot(x_fit, y_log)
 # plt.plot(quad_fit, sensor_fit, label = "Quadratic Fit", color = "Orange")
 # plt.plot(exp_fit, sensor_fit, label = "Exp Fit", color = "Green")
-plt.plot(linear_fit, sensor_fit, label = "Linear Fit", color = "Red")
+# plt.plot(linear_fit, sensor_fit, label = "Linear Fit", color = "Red")
 # plt.plot(power_fit, sensor_fit, label = "Power Fit", color = "Purple")
-plt.ylim(0, 300)
-plt.xlim(0, 5)
+# plt.ylim(0, 300)
+# plt.xlim(0, 5)
 # plt.plot(x, ln_y)
 
 plt.xlabel('FT Z Force')

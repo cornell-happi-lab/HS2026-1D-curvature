@@ -4,20 +4,21 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 # Load data
-df = pd.read_csv("calibration_data/static_test_multinodes.csv")
-df['FT_Z'] = -df['FT_Z'] / 16  # divide by 16
+df = pd.read_csv("calibration_data/static_test_4throw.csv")
+df['FT_Z'] = -df['FT_Z'] / 4  # divide by 16
 
 # Group by step
 grouped = df.groupby('Step')
 
 # --- Use S0 only ---
-baseline = 677  # adjust if needed
+baseline = 726  # adjust if needed
 avg_ft = grouped['FT_Z'].mean()
-avg_sensor = grouped['S3'].mean() - baseline
-std_sensor = grouped['S3'].std()
+avg_sensor = grouped['S7'].mean() - baseline
+std_sensor = grouped['S7'].std()
+
 
 # Define linear threshold
-limit = 4
+limit = 15
 mask = avg_ft < limit
 sensor = avg_sensor[mask]
 sensor_err = std_sensor[mask]
@@ -25,7 +26,7 @@ ft = avg_ft[mask]
 x_model = np.linspace(ft.min(), ft.max(), 200)
 
 sensor_fit = np.linspace(0, 300, 500)
-       
+
 # Linear fit
 coeffs_linear = np.polyfit(sensor, ft, deg=1)
 print("Linear Fit Coeffs:", coeffs_linear)
@@ -70,12 +71,12 @@ plt.plot(linear_fit, sensor_fit, label="Linear Fit", color="red")
 # plt.plot(power_fit, sensor_fit, label="Power Fit", color="purple")
 # plt.plot(exp_fit, sensor_fit, label="Exponential Fit", color="green")
 
-plt.xlabel('FT Z Force / 16')
+plt.xlabel('FT Z Force / 2')
 plt.ylabel('Average S0 Value (Baseline Removed)')
 plt.grid(True)
 plt.legend()
 plt.tight_layout()
-plt.ylim(0, 300)
-plt.xlim(0, 5)
-plt.title("S0 vs FT_Z/16")
+# plt.ylim(0, 100)
+# plt.xlim(0, 10)
+plt.title("S0 vs FT_Z/2")
 plt.show()

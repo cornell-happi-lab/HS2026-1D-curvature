@@ -39,6 +39,9 @@ void loop(){
         Serial.print(','); // tab-separated
     }
    }
+
+//  Serial.println(readings[0][1]);
+   
 //  Serial.println(readings[3][3]);
 }
 
