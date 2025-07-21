@@ -1,6 +1,6 @@
 void setup() {
   // Start serial communication at 9600 baud
-  Serial.begin(9600);
+  Serial.begin(115200);
 }
 
 void loop() {

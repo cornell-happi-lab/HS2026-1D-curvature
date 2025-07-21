@@ -29,6 +29,15 @@ def create_colorbar(height, width=60):
     cv2.putText(bar_img, '0N', (5, height - 10), font, 0.5, (255, 255, 255), 1)
     return bar_img
 
+# def compute_median(sensor_4x4):
+#     # Compute 2x2 medians to form a 3x3 matrix
+#     median_3x3 = np.zeros((3, 3))
+#     for i in range(3):
+#         for j in range(3):
+#             block = sensor_4x4[i:i+2, j:j+2]
+#             median_3x3[i, j] = np.median(block)
+#     return median_3x3
+
 def sensor_to_force(sensor_val):
     return MODEL_COEF * sensor_val + MODEL_INTERCEPT
 
@@ -49,9 +58,11 @@ while True:
             continue
 
         sensor_vals = np.array([int(val) for val in parts])
-        force_vals = sensor_to_force(sensor_vals).reshape(GRID_ROWS, GRID_COLS)
+        sensor_4x4 = sensor_vals.reshape(GRID_ROWS, GRID_COLS)
 
-        heatmap = draw_heatmap(force_vals)
+        # sensor_3x3 = compute_median(sensor_4x4)
+        force_4x4 = sensor_to_force(sensor_4x4)
+        heatmap = draw_heatmap(force_4x4)
         heatmap = cv2.resize(heatmap, (400, 400), interpolation=cv2.INTER_NEAREST)
 
         colorbar = create_colorbar(height=400)

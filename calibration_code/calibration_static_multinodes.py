@@ -51,14 +51,26 @@ def run_daq():
 
         # ---------- Bias ----------
         print("Collecting bias...")
-        time.sleep(1.0)
+        time.sleep(2.0)
         bias_samples = []
+        arduino_bias_samples = []
         for _ in range(100):
             voltages = np.array(task.read())
             bias_samples.append(voltages)
+
+            with lock:
+                sensor_vals = arduino_value.copy() if arduino_value else [np.nan] * 16
+
+            if sensor_vals:
+                arduino_bias_samples.append(sensor_vals)
+
             time.sleep(0.01)
+
         bias = np.mean(bias_samples, axis=0)
+        arduino_bias = np.mean(arduino_bias_samples, axis = 0)
         print("Bias set to:", bias)
+        print(" Sensor Bias set to:", arduino_bias)
+        print("baseline:", np.mean(arduino_bias[4:15]))
 
         step = 1
         print("\nPress ENTER to record a step (100 samples). Press ESC to stop.\n")
@@ -73,7 +85,9 @@ def run_daq():
                 sensor_vals = arduino_value.copy() if arduino_value else [np.nan] * 16
 
             if sensor_vals:
-                print(f"[LIVE] Sensor: {sensor_vals[12]:.2f} FT Z: {zforce:.2f}")
+                corrected_sensor_vals = np.array(sensor_vals) - arduino_bias
+                block_sum = corrected_sensor_vals[5] + corrected_sensor_vals[6] + corrected_sensor_vals[9] + corrected_sensor_vals[10]
+                print(f"[LIVE] Sensor Block: {block_sum:.2f} FT Z: {zforce:.2f}")
                 latest_ft_z = zforce
             else:
                 print(f"[LIVE] Invalid sensor data: {arduino_value}")
@@ -93,10 +107,11 @@ def run_daq():
 
                     with lock:
                         sensors = arduino_value.copy() if arduino_value else [np.nan] * 16
-
-                    sensor_samples.append(sensors)
+                    corrected_sensors = np.array(sensors) - arduino_bias
+                    sensor_samples.append(corrected_sensors)
                     ft_z_samples.append(zforce)
-                    print(f"[Step {step}] Sensor: {sensor_vals[12]:.2f} FT Z: {zforce:.2f}")
+                    block_sum = corrected_sensors[5] + corrected_sensors[6] + corrected_sensors[9] + corrected_sensors[10]
+                    print(f"[Step {step}] Sensor Block: {block_sum:.2f} FT Z: {zforce:.2f}")
                     time.sleep(0.01)
 
                 # Create DataFrame with columns S0 to S15 + FT_Z + Step
@@ -114,6 +129,7 @@ def run_daq():
             # Exit if ESC is pressed
             if keyboard.is_pressed("esc"):
                 print("\nESC pressed. Stopping...\n")
+                print("baseline:", np.mean(arduino_bias))
                 break
 
             time.sleep(0.01)
@@ -124,7 +140,7 @@ run_daq()
 # ---------- Save to CSV ----------
 if step_data:
     full_df = pd.concat(step_data, ignore_index=True)
-    full_df.to_csv("static_test_2ndrow.csv", index=False)
+    full_df.to_csv("static_test_2ndrow1.csv", index=False)
     print("Data saved to static_test_multinodes.csv")
 else:
     print("No step data collected.")
