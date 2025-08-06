@@ -70,7 +70,7 @@ def run_daq():
         arduino_bias = np.mean(arduino_bias_samples, axis = 0)
         print("Bias set to:", bias)
         print(" Sensor Bias set to:", arduino_bias)
-        print("baseline:", np.mean(arduino_bias[4:15]))
+        print("baseline:", np.mean(arduino_bias))
 
         step = 1
         print("\nPress ENTER to record a step (100 samples). Press ESC to stop.\n")
@@ -129,7 +129,9 @@ def run_daq():
             # Exit if ESC is pressed
             if keyboard.is_pressed("esc"):
                 print("\nESC pressed. Stopping...\n")
+                print(" Sensor Bias set to:", arduino_bias)
                 print("baseline:", np.mean(arduino_bias))
+                print("stddev:", np.std(arduino_bias))
                 break
 
             time.sleep(0.01)
