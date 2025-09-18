@@ -50,6 +50,6 @@ all_means = np.mean(sensor_means)
 std_val = np.std(sensor_means)
 
 # === DISPLAY RESULTS ===
-print(f"Mean: {sensor_means}")
+print(sensor_means)
 print(f"All Mean: {all_means}")
 print(f"Standard Deviation: {std_val:.2f}")

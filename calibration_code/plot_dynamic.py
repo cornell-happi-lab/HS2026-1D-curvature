@@ -52,7 +52,7 @@ df['Sensor_smooth'] = moving_average(df['Sensor'], 10)
 fig, ax_sensor = plt.subplots(figsize = (8, 6))
 ax_sensor.set_label("Sensor")
 ax_sensor.set_ylim(0, 175)
-ax_sensor.plot(df.index, df['Sensor_smooth'], color = "Gray", label = "Raw Value")
+# ax_sensor.plot(df.index, df['Sensor_smooth'], color = "Gray", label = "Raw Value")
 
 ax_force = ax_sensor.twinx()
 ax_force.set_label("Force (N)")

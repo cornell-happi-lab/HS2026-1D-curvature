@@ -123,9 +123,16 @@ Z = model.predict(X_grid).reshape(SENSOR.shape)
 
 ax.plot_surface(SENSOR, CURV, Z, alpha=0.6, color='orange', edgecolor='none')
 
-ax.set_xlabel('Sensor Value')
-ax.set_ylabel('Curvature')
-ax.set_zlabel('Force (N)')
+ax.set_xlabel('Sensor Readings')
+ax.set_ylabel('Curvature (1/m)')
+ax.set_zlabel('FT Z Force (N)')
+
+# Define ranges
+ax.set_xlim(0, 1200)   # X-axis (Sensor Readings)
+ax.set_ylim(0, 80)     # Y-axis (Curvature)
+ax.set_zlim(0, 30)     # Z-axis (Force)
+
+
 ax.set_title('Model: Force ~ Sensor + Curvature')
 plt.tight_layout()
 plt.show()

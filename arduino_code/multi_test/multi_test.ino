@@ -5,6 +5,9 @@ int sensor1[4][4];
 int sensor2[4][4];
 int sensor3[4][4];
 
+int rowsum[4];
+int colsum[4];
+
 void setup() {
   for (int i = 0; i < 4; i++) {
     pinMode(rowPins[i], OUTPUT);
@@ -68,7 +71,7 @@ void loop() {
 //    digitalWrite(colPins[2], HIGH);
 //    digitalWrite(colPins[3], HIGH);
 //    sensor2[row][3] = analogRead(A0);
-//
+
 //    //SENSOR 3
 //    digitalWrite(colPins[0], HIGH);
 //    digitalWrite(colPins[1], LOW);
@@ -95,6 +98,18 @@ void loop() {
 //    sensor3[row][3] = analogRead(A0);
     }
 
+
+//    // Calculate row sumation and column sumation
+//    for (int i = 0; i < 4; i ++){
+//      rowsum[i] = 0;
+//      colsum[i] = 0;
+//      for (int j = 0; j < 4; j++)
+//      {
+//        rowsum[i] = rowsum[i] + sensor1[i][j];
+//        colsum[i] = colsum[i] + sensor1[j][i];
+//      }
+//    }
+    
     for (int i = 0; i < 4; i++){
       for (int j = 0; j < 4; j++){
         Serial.print(sensor1[i][j]);
@@ -104,4 +119,20 @@ void loop() {
           Serial.print(',');
       }
     }
+
+//    for (int i = 0; i < 4; i++){
+//      Serial.print(rowsum[i]);
+//      if (i == 3)
+//        Serial.println();
+//      else
+//        Serial.print(',');
+//    }
+
+//    for (int i = 0; i < 4; i++){
+//      Serial.print(colsum[i]);
+//      if (i == 3)
+//        Serial.println();
+//      else
+//        Serial.print(',');
+//    }
 }

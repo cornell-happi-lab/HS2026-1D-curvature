@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
+import os
 
 df = pd.read_csv("calibration_data/sensor5_cy_0.csv")
 df['FT_Z'] = -df['FT_Z']
@@ -52,6 +53,7 @@ avg_sensor5 = grouped5['block'].mean()
 std_sensor5 = grouped5['block'].std()
 
 
+
 plt.errorbar(
     x=avg_ft,
     y=avg_sensor,
@@ -60,9 +62,10 @@ plt.errorbar(
     capsize=5,
     ecolor='gray',
     elinewidth=1,
-    markersize=4,
-    color = "black",
-    label = "0"
+    markersize=5,
+    linewidth=2, 
+    color = "#1b9e77",
+    label = "C$_0$"
 )
 
 plt.errorbar(
@@ -73,9 +76,10 @@ plt.errorbar(
     capsize=5,
     ecolor='gray',
     elinewidth=1,
-    markersize=4,
-    color = "brown",
-    label = "20"
+    markersize=5,
+    linewidth=2, 
+    color = "#d95f02",
+    label = "C$_{20}$"
 )
 
 plt.errorbar(
@@ -86,9 +90,10 @@ plt.errorbar(
     capsize=5,
     ecolor='gray',
     elinewidth=1,
-    markersize=4,
-    color = "grey",
-    label = "40"
+    markersize=5,
+    linewidth=2, 
+    color = "#7570b3",
+    label = "C$_{40}$"
 )
 
 plt.errorbar(
@@ -99,9 +104,10 @@ plt.errorbar(
     capsize=5,
     ecolor='gray',
     elinewidth=1,
-    markersize=4,
-    color = "lightblue",
-    label = "60"
+    markersize=5,
+    linewidth=2, 
+    color = "#e7298a",
+    label = "C$_{60}$"
 )
 
 plt.errorbar(
@@ -112,9 +118,10 @@ plt.errorbar(
     capsize=5,
     ecolor='gray',
     elinewidth=1,
-    markersize=4,
-    color = "lightgreen",
-    label = "80"
+    markersize=5,
+    linewidth=2, 
+    color = "#66a61e",
+    label = "C$_{80}$"
 )
 
 plt.errorbar(
@@ -125,16 +132,28 @@ plt.errorbar(
     capsize=5,
     ecolor='gray',
     elinewidth=1,
-    markersize=4,
-    color = "orchid",
-    label = "100"
+    markersize=5,
+    linewidth=2, 
+    color = "#e6ab02",
+    label = "C$_{100}$"
 )
 
+
 plt.xlabel('FT Z Force')
-plt.ylabel('Sensor Value')
-plt.grid(True)
+plt.ylabel('Sensor Readings')
 plt.xlim(0, 20)
-plt.legend()
+plt.ylim(0, 1200)
+plt.legend(frameon=False) 
+
+# remove top and right spines
+ax = plt.gca()
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+
+ax.spines['bottom'].set_linewidth(1)
+ax.spines['left'].set_linewidth(1)
+
+plt.savefig("figures/static_test.pdf", format="pdf", bbox_inches="tight")
+
 plt.tight_layout()
 plt.show()
-    
