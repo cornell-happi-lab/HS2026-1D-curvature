@@ -1,1 +1,16 @@
 glove_env/
+slides/
+video/
+user_study/
+calibration_code/calibration_data/previous/
+calibration_code/calibration_data/sensor1_caldata/
+calibration_code/calibration_data/sensor2_caldata/
+calibration_code/calibration_data/hand_caldata/
+user_study_heather
+IRB/
+smplpytorch/
+curvature_code/
+manotorch/
+sensor_case_v3/
+sensor_case_v2/
+body_caldata/
