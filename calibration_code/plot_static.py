@@ -2,104 +2,156 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
+import os
 
-# Load the collected step data
-df = pd.read_csv("calibration_data/static_test_single_curved.csv")
+df = pd.read_csv("calibration_data/cy_0.csv")
 df['FT_Z'] = -df['FT_Z']
-
-# Group by each step
+df['block'] = df['S5'] + df['S6'] + df['S9'] + df['S10']
 grouped = df.groupby('Step')
-
-# Define the baseline
-baseline = 840.9494920589498
-
-# Compute averages and std devs
 avg_ft = grouped['FT_Z'].mean()
-avg_sensor = grouped['Sensor'].mean()
-avg_sensor = avg_sensor - baseline
-std_sensor = grouped['Sensor'].std()
+avg_sensor = grouped['block'].mean() 
+std_sensor = grouped['block'].std()
 
-# Define the linear region threshold 
-limit = 4
-mask = avg_ft < limit
-sensor = avg_sensor[mask]
-sensor_err = std_sensor[mask]
-ft = avg_ft[mask]
-x_model = np.linspace(ft.min(), ft.max(), 200)
+df1 = pd.read_csv("calibration_data/cy_20.csv")
+df1['FT_Z'] = -df1['FT_Z']
+df1['block'] = df1['S5'] + df1['S6'] + df1['S9'] + df1['S10']
+grouped1 = df1.groupby('Step')
+avg_ft1 = grouped1['FT_Z'].mean()
+avg_sensor1 = grouped1['block'].mean() 
+std_sensor1 = grouped1['block'].std()
 
-# Try to fit the linear function y = ax + b
-coeffs_linear = np.polyfit(ft, sensor, deg = 1)
-print(coeffs_linear) # [66.27481183 12.81357281]
-linear_fit =  66.27481183 * x_model  + 12.81357281
+df2 = pd.read_csv("calibration_data/cy_40.csv")
+df2['FT_Z'] = -df2['FT_Z']
+df2['block'] = df2['S5'] + df2['S6'] + df2['S9'] + df2['S10']
+grouped2 = df2.groupby('Step')
+avg_ft2 = grouped2['FT_Z'].mean()
+avg_sensor2 = grouped2['block'].mean() 
+std_sensor2 = grouped2['block'].std()
 
-linear_fit_curved =  37.49788248 * x_model  + 47.89784805 # [37.49788248 47.89784805]
+df3 = pd.read_csv("calibration_data/cy_60.csv")
+df3['FT_Z'] = -df3['FT_Z']
+df3['block'] = df3['S5'] + df3['S6'] + df3['S9'] + df3['S10']
+grouped3 = df3.groupby('Step')
+avg_ft3 = grouped3['FT_Z'].mean()
+avg_sensor3 = grouped3['block'].mean() 
+std_sensor3 = grouped3['block'].std()
 
-# # Try to fit the quadratic model y = a + b*x + c*x^2, x is sensor
-# coeffs_quad = np.polyfit(sensor, ft, deg =2)
-# print(coeffs_quad) # [ 3.42089499e-05 -8.71522057e-03  4.62796956e-01] # [ 6.07799109e-05  1.02982734e-02 -1.38433643e-01]
-# # Force = 0.00003497⋅x^2 − 0.002357⋅x + 0.10235
-# quad_fit = 6.07799109e-05 * (sensor_fit**2) +1.02982734e-02 * sensor_fit -1.38433643e-01
+df4 = pd.read_csv("calibration_data/cy_80.csv")
+df4['FT_Z'] = -df4['FT_Z']
+df4['block'] = df4['S5'] + df4['S6'] + df4['S9'] + df4['S10']
+grouped4 = df4.groupby('Step')
+avg_ft4 = grouped4['FT_Z'].mean()
+avg_sensor4 = grouped4['block'].mean() 
+std_sensor4 = grouped4['block'].std()
 
-# # Try to fit the 1.47 power function
-# def power_func(x, a, b):
-#     return a * x**1.47 + b
-# params_power, _ = curve_fit(power_func, sensor, ft)
-# a, b = params_power
-# power_fit = a * (sensor_fit**1.47) + b
-# # Force = 0.0019086776537168572 * (sensor_fit**1.47) -0.14646366590244728
-# print(a) # 0.0019086776537168572
-# print(b) # -0.14646366590244728
+df5 = pd.read_csv("calibration_data/cy_100.csv")
+df5['FT_Z'] = -df5['FT_Z']
+df5['block'] = df5['S5'] + df5['S6'] + df5['S9'] + df5['S10']
+grouped5 = df5.groupby('Step')
+avg_ft5 = grouped5['FT_Z'].mean()
+avg_sensor5 = grouped5['block'].mean() 
+std_sensor5 = grouped5['block'].std()
 
-# # Try to fit the exponential model y = a * e^(bx)
-# # log(Force) = ln(a) + b*Sensor
-# log_ft = np.log(ft)
-# coeffs = np.polyfit(sensor, log_ft, deg=1)
-# b = coeffs[0]
-# ln_a = coeffs[1]
-# a = np.exp(ln_a)
-# # print(b)
-# # print(ln_a)
-# # ln(Force) = -3.1994982717702247 + 0.009745754189733688 * Sensor
 
-# log_force = ln_a + b * sensor_fit
-# exp_fit = np.exp(log_force)
 
-# # # Try to fit the ligatithmic model y = a + b*ln(x)
-# x_fit = np.linspace(avg_ft.min(), avg_ft.max(), 1000)
-# def log_func(x, a, b):
-#     return a + b * np.log(x)
-# params, _ = curve_fit(log_func, avg_ft, avg_sensor)
-# a, b = params
-# y_log = log_func(x_fit, a, b)
-# print(a, b)
-
-# Plot
-plt.figure(figsize=(8, 6))
 plt.errorbar(
     x=avg_ft,
     y=avg_sensor,
     yerr=std_sensor,
-    fmt='o',
+    fmt='o-',
     capsize=5,
     ecolor='gray',
     elinewidth=1,
-    markersize=6,
-    label='Step Avg'
+    markersize=5,
+    linewidth=2, 
+    color = "#1b9e77",
+    label = "C$_0$"
 )
 
-# plt.plot(x_fit, y_log)
-# plt.plot(quad_fit, sensor_fit, label = "Quadratic Fit", color = "Orange")
-# plt.plot(exp_fit, sensor_fit, label = "Exp Fit", color = "Green")
-plt.plot(x_model, linear_fit, label = "Linear Fit for Flat Surface", color = "Red")
-plt.plot(x_model, linear_fit_curved, label = "Linear Fit for Curved Surface", color = "Orange")
-# plt.plot(power_fit, sensor_fit, label = "Power Fit", color = "Purple")
-# plt.ylim(0, 300)
-# plt.xlim(0, 5)
-# plt.plot(x, ln_y)
+plt.errorbar(
+    x=avg_ft1,
+    y=avg_sensor1,
+    yerr=std_sensor1,
+    fmt='o-',
+    capsize=5,
+    ecolor='gray',
+    elinewidth=1,
+    markersize=5,
+    linewidth=2, 
+    color = "#d95f02",
+    label = "C$_{20}$"
+)
+
+plt.errorbar(
+    x=avg_ft2,
+    y=avg_sensor2,
+    yerr=std_sensor2,
+    fmt='o-',
+    capsize=5,
+    ecolor='gray',
+    elinewidth=1,
+    markersize=5,
+    linewidth=2, 
+    color = "#7570b3",
+    label = "C$_{40}$"
+)
+
+plt.errorbar(
+    x=avg_ft3,
+    y=avg_sensor3,
+    yerr=std_sensor3,
+    fmt='o-',
+    capsize=5,
+    ecolor='gray',
+    elinewidth=1,
+    markersize=5,
+    linewidth=2, 
+    color = "#e7298a",
+    label = "C$_{60}$"
+)
+
+plt.errorbar(
+    x=avg_ft4,
+    y=avg_sensor4,
+    yerr=std_sensor4,
+    fmt='o-',
+    capsize=5,
+    ecolor='gray',
+    elinewidth=1,
+    markersize=5,
+    linewidth=2, 
+    color = "#66a61e",
+    label = "C$_{80}$"
+)
+
+plt.errorbar(
+    x=avg_ft5,
+    y=avg_sensor5,
+    yerr=std_sensor5,
+    fmt='o-',
+    capsize=5,
+    ecolor='gray',
+    elinewidth=1,
+    markersize=5,
+    linewidth=2, 
+    color = "#e6ab02",
+    label = "C$_{100}$"
+)
+
 
 plt.xlabel('FT Z Force')
-plt.ylabel('Average Sensor Value')
-plt.grid(True)
+plt.ylabel('Sensor Readings')
+plt.xlim(0, 20)
+plt.ylim(0, 1200)
+plt.legend(frameon=False) 
+
+# remove top and right spines
+ax = plt.gca()
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+
+ax.spines['bottom'].set_linewidth(1)
+ax.spines['left'].set_linewidth(1)
+
 plt.tight_layout()
-plt.legend()
 plt.show()

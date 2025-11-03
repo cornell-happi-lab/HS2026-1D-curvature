@@ -31,7 +31,7 @@ def coeffs_from_curvature(c: float):
     # F = a3*S^3 + a2*S^2 + a1*S + a0, S = (sensor_raw - bias)
     a3 = 0.0
     a2 = -0.000014
-    a1 = 0.009625 + (-0.000372 * c) + (0.000050 * (c**2))
+    a1 = 0.009625 + (-0.000372 * c) + (0.0000050 * (c**2))
     a0 = 0.0
     scale = 4.0  # four summed blocks
     return np.array([scale*a3, scale*a2, scale*a1, scale*a0], dtype=float)

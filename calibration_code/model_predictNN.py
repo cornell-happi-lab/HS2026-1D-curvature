@@ -39,11 +39,11 @@ def load_block_df(csv_path):
     return avg_ft, avg_sensor
 
 cy_files = [
-    ("calibration_data/sensor5_cy_0.csv",  0),
-    ("calibration_data/sensor5_cy_20.csv", 20),
-    ("calibration_data/sensor5_cy_40.csv", 40),
-    ("calibration_data/sensor5_cy_60.csv", 60),
-    ("calibration_data/sensor5_cy_80.csv", 80),
+    ("calibration_data/curvature_aware_cal/sensor5_cy_0.csv",  0),
+    ("calibration_data/curvature_aware_cal/sensor5_cy_20.csv", 20),
+    ("calibration_data/curvature_aware_cal/sensor5_cy_40.csv", 40),
+    ("calibration_data/curvature_aware_cal/sensor5_cy_60.csv", 60),
+    ("calibration_data/curvature_aware_cal/sensor5_cy_80.csv", 80),
     # ("calibration_data/sensor5_cy_100.csv", 100),  # add back if available
 ]
 

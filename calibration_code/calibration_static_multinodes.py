@@ -142,7 +142,7 @@ run_daq()
 # ---------- Save to CSV ----------
 if step_data:
     full_df = pd.concat(step_data, ignore_index=True)
-    full_df.to_csv("static_test_2ndrow1.csv", index=False)
-    print("Data saved to static_test_multinodes.csv")
+    full_df.to_csv("static_test.csv", index=False)
+    print("Data saved to static_test.csv")
 else:
     print("No step data collected.")

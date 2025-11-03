@@ -8,7 +8,7 @@ import pyqtgraph as pg
 import serial
 
 # ========= User-config =========
-COM_PORT = "COM5"              # Arduino COM port
+COM_PORT = "COM3"              # Arduino COM port
 DEFAULT_DEVICE = "Dev1"        # NI-DAQ device name
 DEFAULT_SAMPLE_HZ = 1000
 PLOT_FPS = 40
@@ -36,22 +36,22 @@ def coeffs_from_curvature(c: float):
     Model (only terms including Sensor, F(0,c)=0 by construction):
         F = + 0.009625 * Sensor
             - 0.000372 * Curvature * Sensor
-            + 0.000050 * Curvature^2 * Sensor
+            + 0.0000050 * Curvature^2 * Sensor
             - 0.000014 * Sensor^2
             + 0.000000 * Sensor^3
             + 0.000000
     """
     a3 = 0.0
     a2 = -0.000014
-    a1 = 0.009625 + (-0.000372 * c) + (0.000050 * (c**2))
+    a1 = 0.009625 + (-0.000372 * c) + (0.0000050 * (c**2))
     a0 = 0.0
 
-    # If you conceptually sum four blocks, scale here.
-    # Your last version used *6; keep that behavior:
-    scale = 4.0
+    # Each sensor contains 4 blocks
+    scale = 4
     return [scale * a3, scale * a2, scale * a1, scale * a0]
 
-CURV = 42.28
+
+CURV = 12
 SENSOR_POLY_COEFFS    = coeffs_from_curvature(CURV)
 SENSOR_POLY_COEFFS_C0 = coeffs_from_curvature(0.0)
 
@@ -197,7 +197,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.sample_spin.setValue(DEFAULT_SAMPLE_HZ); self.sample_spin.setSuffix(" Hz")
 
         self.amp_dbl = QtWidgets.QDoubleSpinBox(); self.amp_dbl.setRange(0.0, 1000.0)
-        self.amp_dbl.setValue(8.0); self.amp_dbl.setSingleStep(0.5); self.amp_dbl.setSuffix(" N")
+        self.amp_dbl.setValue(3.0); self.amp_dbl.setSingleStep(0.5); self.amp_dbl.setSuffix(" N")
         self.off_dbl = QtWidgets.QDoubleSpinBox(); self.off_dbl.setRange(-1000.0, 1000.0)
         self.off_dbl.setValue(0.0); self.off_dbl.setSingleStep(0.5); self.off_dbl.setSuffix(" N")
 
