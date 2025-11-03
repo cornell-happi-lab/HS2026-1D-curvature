@@ -9,13 +9,13 @@ An Arduino code [`/arduino_code/multi_test/multi_test.ino`](/arduino_code/multi_
 The sensor can estimate the mean curvature of the surface it is attached to. This is achieved by collecting baseline readings (no force applied) on cylindrical surfaces with different curvatures and training a residual MLP to map these inputs to a single curvature value.
 
 For general 3D surfaces, the model predicts the mean curvature:
-$$
+```math
 \kappa = \tfrac{1}{2}(k_1 + k_2)
-$$
+```
 For cylindrical surfaces, this simplifies to:
-$$
+```math
 \kappa = \tfrac{1}{R} \quad \text{since } k_2 = 0
-$$
+```
 
 ### 2.1 3D Print Fixtures
 3D print the cylindrical fixtures with mean curvatures of 0, 10, 20, 30, 40, 50, 60, 70, and 80 m⁻¹. The STEP files are located in [`/3D_print/MLPdataset`](/3D_print/MLPdataset). The radii for each fixture are calculated in [`MLPdataset.xlsx`](/3D_print/MLPdataset/MLPdataset.xlsx).
