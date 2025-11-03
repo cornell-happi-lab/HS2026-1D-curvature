@@ -1,3 +1,34 @@
+## 0. Directory Diagram
+```
+3D_print
+    ├── fixture_resin
+    ├── MLPdataset
+    ├── sensor_case
+arduino_code
+    ├── multi_test
+    ├── single_node
+calibration_code
+    ├── calibration_data
+    ├── calibration_static_multinodes.py
+    ├── model_predictNN.py
+    ├── plot_static.py
+MLPtraining
+    ├── runs_strong
+    ├── baseline.py
+    ├── realtime_prediction_strong_save.py
+    ├── sensor_data.csv
+    ├── train_strong.py
+PCB
+    ├── gerbers
+    ├── main_board
+validation
+    ├── daily_objects
+    ├── cal_avg_stddev.py
+    ├── mygui_sensor_natural.py
+    ├── mygui_sensor.py
+    ├── validation_data.xlsx
+orders.xlsx
+```
 ## 1. Hardware
 The tactile sensor is fabricated following a resistive-based design commonly used in tactile sensing research. All required materials — including sensor fabrication supplies, PCB components, cables, and connectors — are listed in [`orders`](orders.xlsx). 
 
